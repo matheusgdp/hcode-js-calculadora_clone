@@ -1,5 +1,6 @@
 class CalcController {
     
+    //constructor é o metodo que é chamado sempre que inicio uma nova instancia do objeto
     constructor(){
 
         this._locale = 'pt-BR';
@@ -9,6 +10,8 @@ class CalcController {
 
         this.currentDate; 
         this.initialize();
+
+        this.initButtonsEvents();
     }
 
     initialize(){
@@ -17,8 +20,18 @@ class CalcController {
 
         setInterval(()=>{
             this.setDisplayDateTime();
-        }, 1000)
-    };
+        }, 1000);
+    }
+
+    initButtonsEvents(){
+        let buttons = document.querySelectorAll('#buttons > g, #parts > g');
+
+        buttons.forEach( (btn, index) => {
+            btn.addEventListener('click', e => {
+                console.log(btn.className.baseVal.replace('btn-', ''));
+            });
+        });
+    }
 
     setDisplayDateTime(){
         this.displayDate = this.currentDate.toLocaleDateString(this._locale, {
@@ -37,6 +50,7 @@ class CalcController {
         return this._timeEl.innerHTML = value;
     }
 
+    
     get displayDate(){
         this._dateEl.innerHTML;
     }
