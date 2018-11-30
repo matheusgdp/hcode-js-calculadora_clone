@@ -43,20 +43,20 @@ class CalcController {
     }
 
     get displayTime(){
-        this._timeEl.innerHTML;
+        return this._timeEl.innerHTML;
     }
 
     set displayTime(value){
-        return this._timeEl.innerHTML = value;
+        this._timeEl.innerHTML = value;
     }
 
     
     get displayDate(){
-        this._dateEl.innerHTML;
+        return this._dateEl.innerHTML;
     }
 
     set displayDate(value) {
-        return this._dateEl.innerHTML = value;
+        this._dateEl.innerHTML = value;
     }
 
     get displayCalc(){
