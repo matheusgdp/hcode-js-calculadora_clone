@@ -49,13 +49,31 @@ class CalcController {
         this.operation[this.operation.length - 1] = value;
     };
 
+    pushOperation(value){
+        this.operation.push(value) //O push adiciona um elemento a última posição de um array
+
+        if(this.operation.length > 3) {
+            this.calc();
+        }
+    }
+
+    calc(){
+        let last = this.operation.pop();
+
+        let result = eval(this.operation.join(''));
+
+        this.operation = [result, last];
+    }
+
     isOperator(value){
         return (['+', '-', '*', '/', '%'].indexOf(value) > -1) //indexOf pesquisa um valor dentro de um array e retorna seu indice
     };
 
+    setLastNumberToDisplay(){
+        console.log('C',this.getLastOperation());
+    }
+
     addOperation(value){
-        console.log('A', value);
-        console.log('B', this.getLastOperation());
         if (isNaN(this.getLastOperation())) {
 
             if (this.isOperator(value)){
@@ -67,13 +85,22 @@ class CalcController {
 
             } else {
                 
-                this.operation.push(value); //O push adiciona um elemento a última posição de um array
+                this.pushOperation(value); 
 
             }
 
         } else {
-            let newValue = this.getLastOperation().toString() + value.toString();
-            this.setLastOperation(parseInt(newValue));
+            
+            if(this.isOperator(value)) {
+
+                this.pushOperation(value);
+
+            } else {
+                let newValue = this.getLastOperation().toString() + value.toString();
+                this.setLastOperation(parseInt(newValue));
+
+                this.setLastNumberToDisplay();
+            }  
         }
 
         console.log(this.operation);
