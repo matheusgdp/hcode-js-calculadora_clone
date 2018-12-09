@@ -23,6 +23,8 @@ class CalcController {
         setInterval(()=>{
             this.setDisplayDateTime();
         }, 1000);
+
+        this.setLastNumberToDisplay();
     }
 
     addEventListenerAll(element, events, fn){
@@ -35,10 +37,12 @@ class CalcController {
 
     clearAll(){
         this.operation = [];
+        this.setLastNumberToDisplay();
     };
 
     cancelEntry(){
         this.operation.pop(); //O pop elimina o último elemento de um array
+        this.setLastNumberToDisplay();
     };
 
     getLastOperation(){
@@ -58,11 +62,25 @@ class CalcController {
     }
 
     calc(){
-        let last = this.operation.pop();
 
+        let last = '';
+
+        if(this.operation.length > 3) {
+            last = this.operation.pop();
+        }
+        
         let result = eval(this.operation.join(''));
 
-        this.operation = [result, last];
+        if (last == '%'){
+            result /= 100;
+
+            this.operation = [result];
+        } else {
+            this.operation = [result];
+            if(last) this.operation.push(last);
+        }
+
+        this.setLastNumberToDisplay();
     }
 
     isOperator(value){
@@ -70,7 +88,17 @@ class CalcController {
     };
 
     setLastNumberToDisplay(){
-        console.log('C',this.getLastOperation());
+        let lastNumber;
+
+        for (let i = this.operation.length-1; 1>=0; i--){
+            if (!this.isOperator(this.operation[i])){
+                lastNumber = this.operation[i]
+                break;
+            }
+        }
+
+        if (!lastNumber) lastNumber = 0;
+        this.displayCalc = lastNumber;
     }
 
     addOperation(value){
@@ -87,6 +115,8 @@ class CalcController {
                 
                 this.pushOperation(value); 
 
+                this.setLastNumberToDisplay();
+
             }
 
         } else {
@@ -99,11 +129,11 @@ class CalcController {
                 let newValue = this.getLastOperation().toString() + value.toString();
                 this.setLastOperation(parseInt(newValue));
 
+                console.log(this.operation);
+
                 this.setLastNumberToDisplay();
             }  
         }
-
-        console.log(this.operation);
     };
 
     setError(){
@@ -141,7 +171,7 @@ class CalcController {
                 break;
 
             case 'igual':
-
+                this.calc();
                 break;
 
             case 'ponto':
